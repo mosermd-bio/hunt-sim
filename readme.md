@@ -48,7 +48,7 @@ If you use this tool (in research, publications, pipelines, derivatives, or any 
 GitHub: [https://github.com/mosermd-bio/hunt-sim](https://github.com/mosermd-bio/hunt-sim)
 
 Example citation (for papers/posters/talks):
-mosermd. (2026). Gut Microbiome Diet Trajectory Simulator. GitHub repository. https://github.com/mosermd-bio/hunt-sim
+Matt Moser. (2026). Gut Microbiome Diet Trajectory Simulator. GitHub repository. https://github.com/mosermd-bio/hunt-sim
 
 Thanks for your support — happy to discuss collaborations or improvements!
 

@@ -1,0 +1,299 @@
+/* ================================================================
+   hunt-sim — Local overrides (core.css provides base styles)
+   ================================================================ */
+
+/* --- Main layout --- */
+.container {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.controls {
+  flex: 1 1 280px;
+  min-width: 280px;
+  background: var(--panel);
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  position: relative;
+  transition: flex 0.3s ease, min-width 0.3s ease, padding 0.3s ease;
+}
+
+/* --- Collapse toggle --- */
+.controls-toggle {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 28px;
+  height: 28px;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  background: var(--input-bg);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, background 0.15s;
+  z-index: 2;
+}
+
+.controls-toggle:hover {
+  background: var(--panel-hover, var(--border));
+  color: var(--text);
+}
+
+.controls-body {
+  transition: opacity 0.2s ease;
+}
+
+.controls.collapsed {
+  flex: 0 0 44px;
+  min-width: 44px;
+  padding: 0.85rem 0.5rem;
+  overflow: hidden;
+}
+
+.controls.collapsed .controls-toggle {
+  position: static;
+  margin: 0 auto;
+  transform: rotate(180deg);
+}
+
+.controls.collapsed .controls-body {
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  overflow: hidden;
+}
+
+/* hunt-sim uses smaller h2 inside controls */
+.controls h2 {
+  font-size: 0.95rem;
+}
+
+select[multiple] {
+  font-size: 0.88rem;
+}
+
+/* --- View tabs --- */
+.view-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 0.8rem;
+}
+
+.view-tabs button {
+  flex: 1;
+  padding: 0.5rem 0.6rem;
+  margin: 0;
+  background: var(--input-bg);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  width: auto;
+  min-height: 0;
+}
+
+.view-tabs button:first-child {
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.view-tabs button:last-child {
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.view-tabs button.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* --- Visualization panel --- */
+.viz {
+  flex: 3 1 500px;
+  min-width: 0;
+  background: var(--panel);
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  height: 580px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.view-tabs,
+.diversity-summary {
+  flex-shrink: 0;
+}
+
+.chart-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+  position: relative;
+}
+
+.chart-wrap canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* --- Status & days display --- */
+#status {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin: 0.4rem 0;
+  font-style: italic;
+}
+
+#daysValue {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+}
+
+/* --- Diversity metrics --- */
+.diversity-summary {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.7rem;
+}
+
+.diversity-card {
+  flex: 1;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.7rem 1rem;
+  text-align: center;
+}
+
+.diversity-card .metric-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.25rem;
+}
+
+.diversity-card .metric-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.diversity-card .metric-value.shannon { color: #d2a8ff; }
+.diversity-card .metric-value.simpson { color: #7ee787; }
+
+/* --- Chart hover info overlay --- */
+#hover-info {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(22, 27, 34, 0.93);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  min-width: 230px;
+  pointer-events: none;
+  display: none;
+  z-index: 10;
+  backdrop-filter: blur(6px);
+}
+
+#hover-info .hover-day {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+#hover-info .hover-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  padding: 2px 0;
+  color: var(--text);
+}
+
+#hover-info .hover-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+#hover-info .hover-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-style: italic;
+}
+
+#hover-info .hover-val {
+  color: #fff;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+}
+
+#hover-info .hover-row.hover-active {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  margin: 0 -6px;
+  padding: 2px 6px;
+}
+
+#hover-info .hover-row.hover-active .hover-name {
+  color: #fff;
+  font-weight: 600;
+}
+
+#hover-info .hover-row.hover-active .hover-dot {
+  width: 10px;
+  height: 10px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .controls {
+    min-width: 100%;
+    flex: 1 1 100%;
+  }
+  .viz {
+    min-width: 100%;
+    flex: 1 1 100%;
+    height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .diversity-summary { flex-direction: column; }
+  #hover-info {
+    max-width: calc(100vw - 2rem);
+    min-width: 0;
+  }
+  .view-tabs button {
+    font-size: 0.78rem;
+    padding: 0.4rem 0.3rem;
+  }
+}

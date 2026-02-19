@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gut Microbiome Diet Trajectory Simulator</title>
+  <link rel="stylesheet" href="https://mosermd-bio.github.io/z-core/core.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+  <h1>Gut Microbiome Diet Trajectory Simulator</h1>
+  <p style="color:var(--text-dim); margin:0 0 1.2rem 0; font-size:0.95rem;">
+    Simulate phased dietary interventions on gut microbial composition. Append phases to model long-term trajectories.
+    <span class="disclaimer-wrap" tabindex="0">
+      <span class="disclaimer-icon" aria-label="Disclaimer">i</span>
+      <span class="disclaimer-tip">
+        <strong>Disclaimer and Modeling limitations</strong>
+        This is meant to illustrate average directional effects of diet on gut microbial relative abundances based on
+        published research trends. Real-world responses show huge inter-individual variation due to host genetics (e.g.,
+        FUT2/LCT variants), baseline microbiome composition, adherence level, and other factors—your personal outcome
+        may differ significantly. The model does not simulate full reversion to baseline when a phase ends (real
+        microbiomes often exhibit partial resilience/memory), but appending phases assumes continued good habits, which
+        is appropriate for motivational purposes. All values are relative percentages (standard in microbiome studies
+        from 16S/shotgun sequencing); absolute bacterial biomass or strain-level details are not modeled, because I
+        don't have time. Feel free to fork it an go to town though just make sure to send me a pull request so I can
+        integrate it when you're done.
+      </span>
+    </span>
+  </p>
+
+  <div class="container">
+    <div class="controls" id="controls">
+      <button class="controls-toggle" id="controls-toggle" title="Collapse controls" onclick="toggleControls()">&#x276E;</button>
+      <div class="controls-body" id="controls-body">
+      <h2>Genetic Baseline (Phase 1 only)</h2>
+      <select id="baseline">
+        <option value="0">Typical European secretor + lactase-persistent</option>
+        <option value="1">FUT2 non-secretor</option>
+        <option value="2">Lactase non-persistent</option>
+      </select>
+
+      <h2>Dietary Factors (multi-select)</h2>
+      <select id="foods" multiple>
+        <option value="redmeat">Red/processed meat (daily)</option>
+        <option value="fried">Fried foods / fast food</option>
+        <option value="soda">Sugary soda or energy drink</option>
+        <option value="emulsifier">Ultra-processed with emulsifiers</option>
+        <option value="alcohol">Alcohol (most days)</option>
+        <option value="dairy">High dairy (milk, soft cheese)</option>
+        <option value="fiber">High-fiber plants (protective)</option>
+        <option value="berries">Berries / polyphenols (protective)</option>
+        <option value="olive">Extra-virgin olive oil (protective)</option>
+        <option value="fermented">Fermented foods (protective)</option>
+      </select>
+
+      <h2 style="display:flex; justify-content:space-between; align-items:baseline;">Phase Duration <span id="daysValue"
+          style="font-weight:400;">180 days</span></h2>
+      <input type="range" id="days" min="7" max="365" value="180" step="7">
+
+      <div style="margin-top:0.5rem;">
+        <button class="btn btn-accent" onclick="runPhase(false)">Run Phase (Reset)</button>
+        <button class="btn btn-success" id="appendBtn" onclick="runPhase(true)" style="display:none;">Append Phase</button>
+        <button class="btn btn-danger" onclick="resetAll()">Reset All</button>
+      </div>
+      </div>
+    </div>
+
+    <div class="viz">
+      <div class="view-tabs">
+        <button class="active" onclick="switchView('line')">Line Chart</button>
+        <button onclick="switchView('stacked')">Stacked Area</button>
+        <button onclick="switchView('diversity')">Diversity</button>
+      </div>
+      <div id="diversity-summary" class="diversity-summary" style="display:none;">
+        <div class="diversity-card">
+          <div class="metric-label">Shannon (H')</div>
+          <div class="metric-value shannon" id="shannon-val">&mdash;</div>
+        </div>
+        <div class="diversity-card">
+          <div class="metric-label">Simpson (1-D)</div>
+          <div class="metric-value simpson" id="simpson-val">&mdash;</div>
+        </div>
+      </div>
+      <div id="hover-info"></div>
+      <div class="chart-wrap"><canvas id="chart"></canvas></div>
+    </div>
+  </div>
+
+  <details class="references">
+    <summary>References</summary>
+    <div class="references-body">
+      <ol>
+        <li>
+          <span class="ref-authors">David LA, Maurice CF, Carmody RN, et al.</span>
+          <span class="ref-title">Diet rapidly and reproducibly alters the human gut microbiome.</span>
+          <span class="ref-journal">Nature.</span>
+          <span class="ref-detail">2014;505(7484):559-563.</span>
+          <span class="ref-doi">doi:<a href="https://doi.org/10.1038/nature12820" target="_blank"
+              rel="noopener">10.1038/nature12820</a></span>
+        </li>
+        <li>
+          <span class="ref-authors">Aslam H, Trakman G, Dissanayake T, et al.</span>
+          <span class="ref-title">Dietary interventions and the gut microbiota: a systematic literature review of 80
+            controlled clinical trials.</span>
+          <span class="ref-journal">J Transl Med.</span>
+          <span class="ref-detail">2026;24:39.</span>
+          <span class="ref-doi">doi:<a href="https://doi.org/10.1186/s12967-025-07428-9" target="_blank"
+              rel="noopener">10.1186/s12967-025-07428-9</a></span>
+        </li>
+        <li>
+          <span class="ref-authors">Asnicar F, Manghi P, Fackelmann G, et al.</span>
+          <span class="ref-title">Gut micro-organisms associated with health, nutrition and dietary
+            interventions.</span>
+          <span class="ref-journal">Nature.</span>
+          <span class="ref-detail">2025;650(8101):450-458.</span>
+          <span class="ref-doi">doi:<a href="https://doi.org/10.1038/s41586-025-09854-7" target="_blank"
+              rel="noopener">10.1038/s41586-025-09854-7</a></span>
+        </li>
+        <li>
+          <span class="ref-authors">Moksnes MR, Nethander M, Grahnemo L, et al.</span>
+          <span class="ref-title">The HUNT study identifies host genetic factors reproducibly associated with human gut
+            microbiota composition.</span>
+          <span class="ref-journal">Nat Genet.</span>
+          <span class="ref-detail">Published online 2026.</span>
+          <span class="ref-doi">doi:<a href="https://doi.org/10.1038/s41588-026-02502-4" target="_blank"
+              rel="noopener">10.1038/s41588-026-02502-4</a></span>
+        </li>
+        <li>
+          <span class="ref-authors">Dekkers KF, Pertiwi K, Baldanzi G, et al.</span>
+          <span class="ref-title">Genome-wide association analyses highlight the role of the intestinal molecular
+            environment in human gut microbiota variation.</span>
+          <span class="ref-journal">Nat Genet.</span>
+          <span class="ref-detail">Published online 2026.</span>
+          <span class="ref-doi">doi:<a href="https://doi.org/10.1038/s41588-026-02512-2" target="_blank"
+              rel="noopener">10.1038/s41588-026-02512-2</a></span>
+        </li>
+      </ol>
+    </div>
+  </details>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
